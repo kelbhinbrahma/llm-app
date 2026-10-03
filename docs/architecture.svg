@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="480" viewBox="0 0 1040 480" font-family="Arial, Helvetica, sans-serif" font-size="14">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#444"/>
+    </marker>
+    <style>
+      .box { stroke: #444; stroke-width: 1.5; rx: 8; }
+      .title { font-weight: bold; }
+      .small { font-size: 12px; fill: #333; }
+      .line { stroke: #444; stroke-width: 1.5; fill: none; marker-end: url(#arrow); }
+      .dash { stroke: #888; stroke-width: 1.5; fill: none; stroke-dasharray: 6 4; marker-end: url(#arrow); }
+    </style>
+  </defs>
+  <rect width="1040" height="480" fill="#ffffff"/>
+  <text x="520" y="30" text-anchor="middle" font-size="18" class="title">AI Question-Answering API: Architecture</text>
+
+  <!-- Users -->
+  <rect x="20" y="190" width="110" height="60" fill="#eef2ff" class="box"/>
+  <text x="75" y="217" text-anchor="middle" class="title">Users</text>
+  <text x="75" y="236" text-anchor="middle" class="small">apps / curl</text>
+
+  <!-- Load balancer -->
+  <rect x="170" y="180" width="140" height="80" fill="#e0f2fe" class="box"/>
+  <text x="240" y="208" text-anchor="middle" class="title">nginx</text>
+  <text x="240" y="227" text-anchor="middle" class="small">load balancer</text>
+  <text x="240" y="244" text-anchor="middle" class="small">round robin</text>
+
+  <!-- FastAPI instances -->
+  <rect x="355" y="70" width="190" height="320" fill="#f8fafc" stroke="#999" stroke-dasharray="5 4" rx="10"/>
+  <text x="450" y="92" text-anchor="middle" class="small">FastAPI instances (scale out)</text>
+  <rect x="375" y="105" width="150" height="70" fill="#dcfce7" class="box"/>
+  <text x="450" y="135" text-anchor="middle" class="title">FastAPI #1</text>
+  <text x="450" y="155" text-anchor="middle" class="small">JWT + RBAC check</text>
+  <rect x="375" y="195" width="150" height="70" fill="#dcfce7" class="box"/>
+  <text x="450" y="225" text-anchor="middle" class="title">FastAPI #2</text>
+  <text x="450" y="245" text-anchor="middle" class="small">stateless</text>
+  <rect x="375" y="285" width="150" height="70" fill="#dcfce7" class="box"/>
+  <text x="450" y="315" text-anchor="middle" class="title">FastAPI #N</text>
+  <text x="450" y="335" text-anchor="middle" class="small">/health  /metrics</text>
+
+  <!-- Redis / Postgres / LLM client -->
+  <rect x="600" y="70" width="170" height="80" fill="#fee2e2" class="box"/>
+  <text x="685" y="100" text-anchor="middle" class="title">Redis</text>
+  <text x="685" y="119" text-anchor="middle" class="small">answer cache (TTL)</text>
+  <text x="685" y="136" text-anchor="middle" class="small">rate limit per user</text>
+
+  <rect x="600" y="180" width="170" height="80" fill="#fef9c3" class="box"/>
+  <text x="685" y="210" text-anchor="middle" class="title">LLM client</text>
+  <text x="685" y="229" text-anchor="middle" class="small">timeout, retry + backoff</text>
+  <text x="685" y="246" text-anchor="middle" class="small">fallback model</text>
+
+  <rect x="600" y="290" width="170" height="80" fill="#e0e7ff" class="box"/>
+  <text x="685" y="320" text-anchor="middle" class="title">PostgreSQL</text>
+  <text x="685" y="339" text-anchor="middle" class="small">users (hashed passwords)</text>
+  <text x="685" y="356" text-anchor="middle" class="small">chat_logs (tokens, latency)</text>
+
+  <!-- LLM APIs -->
+  <rect x="830" y="150" width="190" height="60" fill="#f3e8ff" class="box"/>
+  <text x="925" y="176" text-anchor="middle" class="title">Gemini 2.5 Flash</text>
+  <text x="925" y="195" text-anchor="middle" class="small">main model</text>
+  <rect x="830" y="235" width="190" height="60" fill="#f3e8ff" class="box"/>
+  <text x="925" y="261" text-anchor="middle" class="title">Gemini 2.5 Flash Lite</text>
+  <text x="925" y="280" text-anchor="middle" class="small">fallback, used if main fails</text>
+
+  <!-- Prometheus -->
+  <rect x="375" y="410" width="150" height="50" fill="#ffedd5" class="box"/>
+  <text x="450" y="433" text-anchor="middle" class="title">Prometheus</text>
+  <text x="450" y="450" text-anchor="middle" class="small">+ Grafana (proposed)</text>
+
+  <!-- arrows -->
+  <path d="M130,220 L168,220" class="line"/>
+  <path d="M310,210 L373,140" class="line"/>
+  <path d="M310,220 L373,230" class="line"/>
+  <path d="M310,230 L373,320" class="line"/>
+  <path d="M545,180 L598,115" class="line"/>
+  <path d="M545,225 L598,222" class="line"/>
+  <path d="M545,270 L598,325" class="line"/>
+  <path d="M770,210 L828,185" class="line"/>
+  <path d="M770,230 L828,262" class="dash"/>
+  <path d="M450,408 L450,357" class="dash"/>
+  <text x="460" y="390" class="small">scrapes /metrics</text>
+</svg>
